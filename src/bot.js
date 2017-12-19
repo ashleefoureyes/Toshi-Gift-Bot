@@ -32,14 +32,11 @@ function onMessage(session, message) {
 
 function onCommand(session, command) {
   switch (command.content.value) {
-    case 'ping':
-      pong(session)
+    case 'adult':
+      adult(session)
       break
-    case 'count':
-      count(session)
-      break
-    case 'donate':
-      donate(session)
+    case 'child':
+      child(session)
       break
     }
 }
@@ -69,12 +66,47 @@ function onPayment(session, message) {
 // STATES
 
 function welcome(session) {
-  sendMessage(session, `Hello Token!`)
+  session.reply(SOFA.Message({
+  body: 'Hello, welcome to Gift Bot! I am here to help you find the perfect gift.',
+  controls: [
+      {type: 'button', label: 'Adult', value: 'adult'},
+      {type: 'button', label: 'Child', value: 'child'}
+    ],
+  showKeyboard: false,
+  }))
 }
 
 function pong(session) {
   sendMessage(session, `Pong`)
 }
+
+// Adult Session 
+
+function adult(session){
+  session.reply(SOFA.Message({
+  body: 'Choose a category.',
+  controls:[
+      {type: 'button', label: 'Tech', value: 'tech'},
+      {type: 'button', label: 'Fashion', value:'fashion'}
+  ],
+  showKeyboard: false,
+  }))
+}
+
+//Child Session
+
+function child(session){
+  session.reply(SOFA.Message({
+  body: 'Choose a category.',
+  controls:[
+      {type: 'button', label: 'Tech', value: 'tech'},
+      {type: 'button', label: 'Fashion', value: 'fashion'}
+  ],
+  showKeyboard: false,
+  }))
+}
+
+/*
 
 // example of how to store state on each user
 function count(session) {
@@ -89,14 +121,13 @@ function donate(session) {
     session.requestEth(toEth.USD(1))
   })
 }
+*/
 
 // HELPERS
 
-function sendMessage(session, message) {
+function sendMessage(session, message, entry) {
   let controls = [
-    {type: 'button', label: 'Ping', value: 'ping'},
-    {type: 'button', label: 'Count', value: 'count'},
-    {type: 'button', label: 'Donate', value: 'donate'}
+    {type: 'button', label: 'Exit', value: 'exit'}   
   ]
   session.reply(SOFA.Message({
     body: message,
